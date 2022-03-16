@@ -2,12 +2,17 @@ import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Navbar from "../components/Navbar";
+
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 
 function BeerDetails() {
   //DO 1. Create status
   const [beerDetails, setBeerDetails] = useState(null);
   const { id } = useParams();
-  const navigate = useNavigate
+  const navigate = useNavigate;
 
   //DO 2. Create useEffect
   useEffect(() => {
@@ -17,11 +22,13 @@ function BeerDetails() {
   //DO 3. Create the function to get the data from API
   const getBeerDetails = async () => {
     try {
-      const response = await axios.get(`https://ih-beers-api2.herokuapp.com/beers/${id}`)
+      const response = await axios.get(
+        `https://ih-beers-api2.herokuapp.com/beers/${id}`
+      );
       console.log(response.data);
       setBeerDetails(response.data);
     } catch (err) {
-      navigate("/error")
+      navigate("/error");
     }
   };
 
@@ -35,16 +42,44 @@ function BeerDetails() {
   }
 
   return (
-    <div>
-      <img src={beerDetails.image_url} alt="" />
-      <h1>{beerDetails.name}</h1>
-      <p>Tagline: {beerDetails.tagline}</p>
-      <p>First brewed: {beerDetails.first_brewed}</p>
-      <p>Attenuation Level: {beerDetails.attenuation_level}</p>
-      <p>Description: {beerDetails.description}</p>
-      <p>Contributed by: {beerDetails.contributed_by}</p>
+    <div className="beer-container">
+      <div>
+        <Navbar />
+        <Card className="beer-img-card">
+          <CardContent>
+            <img src={beerDetails.image_url} alt="beerimage" />
+          </CardContent>
+        </Card>
+      </div>
+      <div>
+        <Card className="beer-card">
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {beerDetails.name}
+            </Typography>
+            <Typography variant="body2" color="text.primary">
+              Tagline: {beerDetails.tagline}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              First brewed: {beerDetails.first_brewed}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Attenuation Level: {beerDetails.attenuation_level}
+            </Typography>
+            <br />
+            <Typography variant="body3" color="text.secondary">
+              Description: {beerDetails.description}
+            </Typography>
+            <br />
+            <br />
+            <Typography variant="body4" color="text.secondary">
+              Contributed by: {beerDetails.contributed_by}
+            </Typography>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  )
+  );
 }
 
-export default BeerDetails
+export default BeerDetails;
